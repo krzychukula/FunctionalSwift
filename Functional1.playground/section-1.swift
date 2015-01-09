@@ -68,15 +68,34 @@ let circularRegion = shift(Position(x: 5, y: 5), circle(10))
 
 circularRegion(Position(x: 1, y: 1))
 
+func invert(region: Region) -> Region {
+    return { point in !region(point) }
+}
+
+func intersection(region1: Region, region2: Region) -> Region {
+    return { point in region1(point) && region2(point) }
+}
+
+func union(region1: Region, region2: Region) -> Region {
+    return { point in region1(point) || region2(point) }
+}
+
+func difference(region: Region, minusRegion: Region) -> Region {
+   return intersection(region, invert(minusRegion))
+}
 
 
+//New inRange funciton
 
+func newInRange(ownPosition: Position, target: Position, friendly: Position, range: Distance) -> Bool {
+    let rangeRegion = difference(circle(range), circle(minimumDistance))
+    let targetRegion = shift(ownPosition, rangeRegion)
+    let friendlyRegion = shift(friendly, circle(minimumDistance))
+    let resultRegion = difference(targetRegion, friendlyRegion)
+    return resultRegion(target)
+}
 
-
-
-
-
-
+newInRange(Position(x: 1, y: 1), Position(x: 2, y: 5), Position(x: 10, y: 10), 20)
 
 
 
