@@ -39,3 +39,13 @@ func inRange4(target: Position, ownPosition: Position, friendly: Position, range
         && targetDistance >= minimumDistance
         && (friendlyDistance >= minimumDistance)
 }
+
+//Rafactoring
+
+typealias Region = Position -> Bool
+
+func circle(radius: Distance) -> Region {
+    return { point in
+        sqrt(point.x * point.x + point.y * point.y) <= radius
+    }
+}
