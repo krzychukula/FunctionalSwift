@@ -57,9 +57,16 @@ func circle2(radius: Distance, center: Position) -> Region {
     }
 }
 
+func shift(offset: Position, region: Region) -> Region {
+    return { point in
+        let shiftedPoint = Position(x: point.x - offset.x, y: point.y - offset.y)
+        return region(shiftedPoint)
+    }
+}
+//how to use shift and radius
+let circularRegion = shift(Position(x: 5, y: 5), circle(10))
 
-
-
+circularRegion(Position(x: 1, y: 1))
 
 
 
