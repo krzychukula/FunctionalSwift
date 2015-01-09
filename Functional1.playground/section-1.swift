@@ -49,3 +49,29 @@ func circle(radius: Distance) -> Region {
         sqrt(point.x * point.x + point.y * point.y) <= radius
     }
 }
+
+func circle2(radius: Distance, center: Position) -> Region {
+    return { point in
+        let shiftedPoint = Position(x: point.x - center.x, y: point.y - center.y)
+        return sqrt(shiftedPoint.x * shiftedPoint.y + shiftedPoint.y * shiftedPoint.y) <= radius
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
