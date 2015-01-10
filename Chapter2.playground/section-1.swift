@@ -60,10 +60,14 @@ func colorOverlay(color: NSColor) -> Filter {
     }
 }
 
-//var url = NSURL(string: "http://tinyurl.com/m74sldb")
-let url = NSURL(fileURLWithPath: "Downloads/SlotMachineAssets/King.png")
+var url = NSURL(string: "http://tinyurl.com/m74sldb")
+
 let image = CIImage(contentsOfURL: url)
 
+let blurRadius = 5.0
+let overlayColor = NSColor.redColor().colorWithAlphaComponent(0.2)
+let blurredImage = blur(blurRadius)(image)
+let overlaidImage = colorOverlay(overlayColor)(blurredImage)
 
 
 
