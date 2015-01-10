@@ -33,6 +33,10 @@ func blur(radius: Double) -> Filter {
 }
 
 func colorGenerator(color: NSColor) -> Filter {
-    
+    return { _ in
+        let parameters: Parameters = [kCIInputColorKey: color]
+        let filter = CIFilter(name: "CIConstantColorGenerator", parameters: parameters)
+        return filter.outputImage
+    }
 }
 
