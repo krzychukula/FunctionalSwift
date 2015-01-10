@@ -95,7 +95,11 @@ if image != nil {
     let result2 = myFilter2(image)
 }
 
+func add3(x: Int)(y: Int) -> Int {
+    return x + y
+}
 
+add3(1)(y: 2)
 
 
 
