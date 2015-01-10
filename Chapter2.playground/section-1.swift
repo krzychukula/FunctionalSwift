@@ -57,4 +57,16 @@ func colorOverlay(color: NSColor) -> Filter {
     return { image in
         let overlay = colorGenerator(color)(image)
         return compositeSourceOver(overlay)(image)
+    }
 }
+
+//var url = NSURL(string: "http://tinyurl.com/m74sldb")
+let url = NSURL(fileURLWithPath: "Downloads/SlotMachineAssets/King.png")
+let image = CIImage(contentsOfURL: url)
+
+
+
+
+
+
+
