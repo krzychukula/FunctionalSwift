@@ -1,6 +1,6 @@
 // Playground - noun: a place where people can play
 
-import UIKit
+import Cocoa
 
 typealias Filter = CIImage -> CIImage
 
@@ -31,3 +31,8 @@ func blur(radius: Double) -> Filter {
         return filter.outputImage
     }
 }
+
+func colorGenerator(color: NSColor) -> Filter {
+    
+}
+
