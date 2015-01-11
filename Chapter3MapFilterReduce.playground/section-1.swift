@@ -149,3 +149,18 @@ func reduce<A, R>(  arr: [A],
 }
 
 
+func sumUsingReduce(xs: [Int]) -> Int {
+    return reduce(xs, 0) { result, x in result + x }
+}
+
+sumUsingReduce(xs)
+
+func productUsingReduce(xs: [Int]) -> Int {
+    return reduce(xs, 1, *)
+}
+productUsingReduce(xs)
+
+func concatUsingReduce(xs: [String]) -> String {
+    return reduce(xs, "", +)
+}
+concatUsingReduce(exampleFiles)
