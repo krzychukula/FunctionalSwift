@@ -53,3 +53,12 @@ func map<T, U>(xs: [T], f: T -> U) -> [U] {
     return result
 }
 
+func computeIntArray<T>(xs: [Int], f: Int -> T) -> [T] {
+    return map(xs, f)
+}
+
+//using Swift map
+func doubleArray3(xs: [Int]) -> [Int] {
+    return xs.map { x in 2 * x }
+}
+
