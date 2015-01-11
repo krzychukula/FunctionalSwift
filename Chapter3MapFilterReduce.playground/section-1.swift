@@ -216,3 +216,29 @@ cities.filter({ city in city.population > 1000 })
     .reduce("City: Population", combine: { result, c in
         return result + "\n" + "\(c.name) : \(c.population)"
     })
+
+
+
+
+//generics vs any type
+
+func noOp<T>(x: T) -> T {
+    return x
+}
+
+func noOpAny(x: Any) -> Any {
+    return x
+}
+
+infix operator >>> { associativity left }
+func >>> <A, B, C>(f: A -> B, g: B -> C) -> A -> C {
+    return { x in g(f(x)) }
+}
+
+
+func curry<A, B, C>(f: (A, B) -> C) -> A -> B -> C {
+    return { x in { y in f(x, y) } }
+}
+
+
+
