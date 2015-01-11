@@ -168,3 +168,18 @@ concatUsingReduce(exampleFiles)
 reduce(xs, 0, +)
 
 xs.reduce(0, +)
+
+
+
+func flatten<T>(xss: [[T]]) -> [T] {
+    var result: [T] = []
+    for xs in xss {
+        result += xs
+    }
+    return result
+}
+func flattenUsingReduce<T>(xss: [[T]]) -> [T] {
+    return xss.reduce([]) { result, xs in result + xs }
+}
+
+
