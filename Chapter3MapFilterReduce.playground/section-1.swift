@@ -97,7 +97,7 @@ getSwiftFiles2(exampleFiles)
 exampleFiles.filter { file in file.hasSuffix(".swift") }
 
 
-//Map
+//Reduce
 
 func sum(xs: [Int]) -> Int {
     var result: Int = 0
