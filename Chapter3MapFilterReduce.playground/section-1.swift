@@ -164,3 +164,5 @@ func concatUsingReduce(xs: [String]) -> String {
     return reduce(xs, "", +)
 }
 concatUsingReduce(exampleFiles)
+
+reduce(xs, 0, +)
