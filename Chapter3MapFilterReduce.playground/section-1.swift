@@ -192,3 +192,27 @@ func filterUsingReduce<T>(xs: [T], check: T -> Bool) -> [T] {
     }
 }
 
+
+
+struct City {
+    let name: String
+    let population: Int
+}
+
+let paris = City(name: "Paris", population: 2243)
+let madrid = City(name: "Madrid", population: 3216)
+let amsterdam = City(name: "Amsterdam", population: 811)
+let berlin = City(name: "Berlin", population: 3397)
+
+let cities = [paris, madrid, amsterdam, berlin]
+
+func scale(city: City) -> City {
+    return City(name: city.name, population: city.population * 1000)
+}
+
+//more than million 
+cities.filter({ city in city.population > 1000 })
+.map(scale)
+    .reduce("City: Population", combine: { result, c in
+        return result + "\n" + "\(c.name) : \(c.population)"
+    })
