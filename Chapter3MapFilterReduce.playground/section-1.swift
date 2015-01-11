@@ -62,3 +62,17 @@ func doubleArray3(xs: [Int]) -> [Int] {
     return xs.map { x in 2 * x }
 }
 
+//FILTER
+
+let exampleFiles = ["README.md", "HelloWorld.swift", "HelloSwift.swift", "FlappyBird.swift"]
+
+func getSwiftFiles(files: [String]) -> [String] {
+    var result: [String] = []
+    for file in files {
+        if file.hasSuffix(".swift") {
+            result.append(file)
+        }
+    }
+    return result
+}
+getSwiftFiles(exampleFiles)
