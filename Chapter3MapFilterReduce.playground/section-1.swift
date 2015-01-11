@@ -76,3 +76,23 @@ func getSwiftFiles(files: [String]) -> [String] {
     return result
 }
 getSwiftFiles(exampleFiles)
+
+
+func filter<T>(xs: [T], check: T -> Bool) -> [T] {
+    var result: [T] = []
+    for x in xs {
+        if check(x) {
+            result.append(x)
+        }
+    }
+    return result
+}
+
+func getSwiftFiles2(files: [String]) -> [String] {
+    return filter(files) { file in file.hasSuffix(".swift") }
+}
+
+getSwiftFiles2(exampleFiles)
+
+exampleFiles.filter { file in file.hasSuffix(".swift") }
+
