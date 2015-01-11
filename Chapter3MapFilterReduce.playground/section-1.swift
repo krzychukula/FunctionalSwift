@@ -96,3 +96,18 @@ getSwiftFiles2(exampleFiles)
 
 exampleFiles.filter { file in file.hasSuffix(".swift") }
 
+
+//Map
+
+func sum(xs: [Int]) -> Int {
+    var result: Int = 0
+    for x in xs {
+        result += x
+    }
+    return result
+}
+
+let xs = [1,2,3,4]
+sum(xs)
+
+
