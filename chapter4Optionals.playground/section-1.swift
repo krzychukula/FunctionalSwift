@@ -125,8 +125,29 @@ populationOfCapital("France")
 populationOfCapital("Poland")
 
 
+infix operator >>= {}
+func >>=<U, T>(optional: T?, f: T -> U?) -> U? {
+    if let x = optional {
+        return f(x)
+    }else {
+        return nil
+    }
+}
 
+func addOptional2(optionalX: Int?, optionalY: Int?) -> Int? {
+    return optionalX >>= { x in
+        optionalY >>= { y in
+            x + y
+        }
+    }
+}
 
-
+func populationOfCapital2(country: String) -> Int? {
+    return capitals[country] >>= { capital in
+        cities[capital] >>= { population in
+            return population * 1000
+        }
+    }
+}
 
 
