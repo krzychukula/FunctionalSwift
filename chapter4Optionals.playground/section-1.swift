@@ -109,3 +109,24 @@ func addOptionals(optionalX: Int?, optionalY: Int?) -> Int? {
     return nil
 }
 
+
+let capitals = ["France": "Paris", "Spain": "Madrid", "The Netherlands": "Amsterdam", "Belgium": "Brussels"]
+
+func populationOfCapital(country: String) -> Int? {
+    if let capital = capitals[country] {
+        if let population = cities[capital] {
+            return population * 1000
+        }
+    }
+    return nil
+}
+
+populationOfCapital("France")
+populationOfCapital("Poland")
+
+
+
+
+
+
+
