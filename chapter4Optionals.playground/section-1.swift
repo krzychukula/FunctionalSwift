@@ -96,3 +96,16 @@ func incrementOptional2(optional: Int?) -> Int? {
     return optional.map { x in x + 1 }
 }
 
+let x: Int? = 3
+let y: Int? = nil
+//let z: Int? = x + y
+
+func addOptionals(optionalX: Int?, optionalY: Int?) -> Int? {
+    if let x = optionalX {
+        if let y = optionalY {
+            return x + y
+        }
+    }
+    return nil
+}
+
