@@ -19,3 +19,31 @@ if let madridPopulation = cities["Madrid"] {
 }else{
     println("Unknown city: Madrid")
 }
+
+//infix operator ??
+func ??<T>(optional: T?, defaultValue: T) -> T {
+    if let x = optional {
+        return x
+    }else {
+        return defaultValue
+    }
+}
+
+func ??<T>(optional: T?, defaultValue: () -> T) -> T {
+    if let x = optional {
+        return x
+    }else {
+        return defaultValue()
+    }
+}
+
+madridPopulation ?? { 12 }
+
+//infix operator ?? { associativity right precedence 110 }
+func ??<T>(optional: T?, defaultValue: @autoclosure () -> T) -> T {
+    if let x = optional {
+        return x
+    }else {
+        return defaultValue()
+    }
+}
