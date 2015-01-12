@@ -72,3 +72,27 @@ if let myState = order.person?.address?.state? {
 }else {
     println("Unknown person, address, or state")
 }
+
+
+
+//MARK: Maps and More
+func incrementOptional(optional: Int?) -> Int? {
+    if let x = optional {
+        return x + 1
+    }else{
+        return nil
+    }
+}
+
+func map<T, U>(optional: T?, f: T -> U) -> U? {
+    if let x = optional {
+        return f(x)
+    }else{
+        return nil
+    }
+}
+
+func incrementOptional2(optional: Int?) -> Int? {
+    return optional.map { x in x + 1 }
+}
+
