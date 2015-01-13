@@ -16,7 +16,27 @@ func minusIsCommutative(x: Int, y: Int) -> Bool {
 
 //check("Additive identity") { (x: Int) in x + 0 == x }
 
-protocol Arbitrary {
+
+protocol Smaller {
+    func smaller() -> Self?
+}
+
+
+extension Int: Smaller {
+    func smaller() -> Int? {
+        return self == 0 ? nil : self / 2
+    }
+}
+
+100.smaller()
+
+extension String: Smaller {
+    func smaller() -> String? {
+        return self.isEmpty ? nil : dropFirst(self)
+    }
+}
+
+protocol Arbitrary: Smaller {
     class func arbitrary() -> Self
 }
 
@@ -56,7 +76,7 @@ extension String: Arbitrary {
 
 String.arbitrary()
 
-let numberOfIterations = 50
+let numberOfIterations = 5
 
 func check1<A: Arbitrary>(message: String, prop: A -> Bool) -> () {
     for _ in 0 ..< numberOfIterations {
@@ -85,3 +105,10 @@ check1("Area should be at least 0") { size in area(size) >= 0 }
 check1("Every string starts with Hello") { (s: String) in
     s.hasPrefix("Hello")
 }
+
+
+
+
+
+
+
