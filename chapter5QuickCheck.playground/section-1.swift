@@ -16,4 +16,9 @@ check("Minus should be commutative", minusIsCommutative)
 func check(message: String, f: (Int, Int) -> Bool) {
     
 }
+func check(message: String, f: (Int) -> Bool) {
+    
+}
+
+check("Additive identity") { (x: Int) in x + 0 == x }
 
