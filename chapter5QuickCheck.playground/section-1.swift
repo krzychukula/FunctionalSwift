@@ -22,3 +22,14 @@ func check(message: String, f: (Int) -> Bool) {
 
 check("Additive identity") { (x: Int) in x + 0 == x }
 
+protocol Arbitrary {
+    class func arbitrary() -> Self
+}
+
+extension Int: Arbitrary {
+    static func arbitrary() -> Int {
+        return Int(arc4random())
+    }
+}
+
+Int.arbitrary()
