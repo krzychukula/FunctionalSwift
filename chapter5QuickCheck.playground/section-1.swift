@@ -6,21 +6,15 @@ func plusIsCommutative(x: Int, y: Int) -> Bool {
     return x + y == y + x
 }
 
-check("Plus should be commutative", plusIsCommutative)
+//check("Plus should be commutative", plusIsCommutative)
 
 func minusIsCommutative(x: Int, y: Int) -> Bool {
     return x - y == y - x
 }
-check("Minus should be commutative", minusIsCommutative)
+//check("Minus should be commutative", minusIsCommutative)
 
-func check(message: String, f: (Int, Int) -> Bool) {
-    
-}
-func check(message: String, f: (Int) -> Bool) {
-    
-}
 
-check("Additive identity") { (x: Int) in x + 0 == x }
+//check("Additive identity") { (x: Int) in x + 0 == x }
 
 protocol Arbitrary {
     class func arbitrary() -> Self
@@ -28,7 +22,7 @@ protocol Arbitrary {
 
 extension Int: Arbitrary {
     static func arbitrary() -> Int {
-        return Int(arc4random())
+        return Int(arc4random()) - Int(arc4random())
     }
 }
 
@@ -62,7 +56,7 @@ extension String: Arbitrary {
 
 String.arbitrary()
 
-let numberOfIterations = 5
+let numberOfIterations = 50
 
 func check1<A: Arbitrary>(message: String, prop: A -> Bool) -> () {
     for _ in 0 ..< numberOfIterations {
@@ -74,4 +68,18 @@ func check1<A: Arbitrary>(message: String, prop: A -> Bool) -> () {
     }
     println("\"\(message)\" passed \(numberOfIterations) tests.")
 }
+
+
+extension CGSize: Arbitrary {
+    static func arbitrary() -> CGSize {
+        return CGSize(width: Int.arbitrary(), height: Int.arbitrary())
+    }
+}
+
+func area(size: CGSize) -> CGFloat {
+    return size.width * size.height
+}
+check1("Area should be at least 0") { size in area(size) >= 0 }
+
+
 
