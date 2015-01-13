@@ -157,10 +157,10 @@ func qsort(var array: [Int]) -> [Int] {
     return qsort(lesser) + [pivot] + qsort(greater)
 }
 
-check2("sqort should behave like sort") {
-    (x: [Int]) in
-    return qsort(x) == x.sorted(<)
-}
+//check2("sqort should behave like sort") {
+//    (x: [Int]) in
+//    return qsort(x) == x.sorted(<)
+//}
 
 extension Array: Smaller {
     func smaller() -> [T]? {
@@ -178,5 +178,45 @@ func arbitraryArray<X: Arbitrary>() -> [X] {
         return X.arbitrary()
     }
 }
+
+
+struct ArbitraryI<T> {
+    let arbitrary: () -> T
+    let smaller: T -> T?
+}
+
+
+func checkHelper<A>(arbitraryInstance: ArbitraryI<A>, prop: A -> Bool, message: String) -> () {
+    
+    for _ in 0..<numberOfIterations {
+        let value = arbitraryInstance.arbitrary()
+        if !prop(value) {
+            let smallerValue = iterateWhile({ !prop($0) }, value, arbitraryInstance.smaller)
+            println("\(message) doesn't hold: \(smallerValue)")
+            return
+        }
+    }
+    println("\(message) passed \(numberOfIterations) tests.")
+}
+
+func check<X: Arbitrary>(message: String, prop: X -> Bool) -> () {
+    let instance = ArbitraryI(arbitrary: { X.arbitrary() }, smaller: { $0.smaller() })
+    checkHelper(instance, prop, message)
+}
+
+func check<X: Arbitrary>(message: String, prop: [X] -> Bool) -> () {
+    let instance = ArbitraryI(arbitrary: arbitraryArray, smaller: {
+        (x: [X]) in
+        x.smaller()
+    })
+    checkHelper(instance, prop, message)
+}
+
+check("qsort should behave like sort") {
+    (x: [Int]) in
+    return qsort(x) == x.sorted(<)
+}
+
+
 
 
