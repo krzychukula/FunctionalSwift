@@ -149,3 +149,34 @@ check2("Every string starts with Hello") { (s: String) in
 }
 
 
+func qsort(var array: [Int]) -> [Int] {
+    if array.isEmpty { return [] }
+    let pivot = array.removeAtIndex(0)
+    let lesser = array.filter { $0 < pivot }
+    let greater = array.filter { $0 >= pivot }
+    return qsort(lesser) + [pivot] + qsort(greater)
+}
+
+check2("sqort should behave like sort") {
+    (x: [Int]) in
+    return qsort(x) == x.sorted(<)
+}
+
+extension Array: Smaller {
+    func smaller() -> [T]? {
+        if !self.isEmpty {
+            return Array(dropFirst(self))
+        }
+        return nil
+    }
+}
+
+func arbitraryArray<X: Arbitrary>() -> [X] {
+    let randomLength = Int(arc4random() % 50)
+    return tabulate(randomLength) {
+        _ in
+        return X.arbitrary()
+    }
+}
+
+
