@@ -94,6 +94,14 @@ extension CGSize: Arbitrary {
     static func arbitrary() -> CGSize {
         return CGSize(width: Int.arbitrary(), height: Int.arbitrary())
     }
+    func smaller() -> CGSize? {
+        if let w = Int(self.width).smaller() {
+            if let h = Int(self.height).smaller() {
+                return CGSize(width: w, height: h)
+            }
+        }
+        return nil
+    }
 }
 
 func area(size: CGSize) -> CGFloat {
