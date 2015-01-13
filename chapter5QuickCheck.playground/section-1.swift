@@ -82,4 +82,6 @@ func area(size: CGSize) -> CGFloat {
 check1("Area should be at least 0") { size in area(size) >= 0 }
 
 
-
+check1("Every string starts with Hello") { (s: String) in
+    s.hasPrefix("Hello")
+}
