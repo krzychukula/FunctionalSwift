@@ -54,5 +54,32 @@ func setClassToOrigin(point: PointClass) -> PointClass {
 var classOrigin = setClassToOrigin(classPoint)
 
 
+let immutablePoint = PointStruct(x: 0, y: 0)
+
+//rejected
+//immutablePoint = PointStruct(x: 1, y: 1)
+//immutablePoint.x = 3
+
+var mutablePoint = PointStruct(x: 1, y: 1)
+mutablePoint.x = 3
+
+struct ImmutablePointStruct {
+    let x: Int
+    let y: Int
+}
+
+var immutablePoint2 = ImmutablePointStruct(x: 1, y: 1)
+//rejected
+//immutablePoint2.x = 3
+
+immutablePoint2 = ImmutablePointStruct(x: 2, y: 2)
+
+
+
+
+
+
+
+
 
 
