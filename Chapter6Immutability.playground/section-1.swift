@@ -18,5 +18,17 @@ var sameStructPoint = structPoint
 sameStructPoint.x = 3
 structPoint
 
+class PointClass {
+    var x: Int
+    var y: Int
+    
+    init(x: Int, y: Int){
+        self.x = x
+        self.y = y
+    }
+}
 
+var classPoint = PointClass(x: 1, y: 2)
+var sameClassPoint = classPoint
+sameClassPoint.x = 3
 
