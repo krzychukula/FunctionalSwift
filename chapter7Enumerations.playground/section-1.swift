@@ -49,3 +49,12 @@ func createEncoding(enc: NSStringEncoding) -> Encoding? {
     }
 }
 
+
+func localizedEncodingName(encoding: Encoding) -> String {
+    return String.localizedNameOfStringEncoding(toNSStringEncoding(encoding))
+}
+
+localizedEncodingName(Encoding.NEXTSTEP)
+
+
+
