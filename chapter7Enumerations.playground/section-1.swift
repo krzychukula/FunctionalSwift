@@ -87,6 +87,13 @@ func readFile(path: String, encoding: Encoding) -> ReadFileResult {
 }
 
 
+switch readFile("/Users/chris/work/npm-debug.log", Encoding.UTF8) {
+case let ReadFileResult.Success(contents):
+    println("File successfully opened...")
+case let ReadFileResult.Failure(error):
+    println("Failed to open file. Error code: \(error.code)")
+}
+
 
 
 
