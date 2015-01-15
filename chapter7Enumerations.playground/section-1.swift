@@ -9,6 +9,8 @@ import Cocoa
 //    NSJapaneseEUCStringEncoding = 3,
 //    NSUTF8StringEncoding = 4
 //}
+//NSAssert(NSASCIIStringEncoding + “NSNEXTSTEPStringEncoding == NSJapaneseEUCStringEncoding, @"Adds up...");”
+
 
 enum Encoding {
     case ASCII
@@ -17,3 +19,4 @@ enum Encoding {
     case UTF8
 }
 
+//let myEncoding = Encoding.ASCII + Encoding.UTF8
