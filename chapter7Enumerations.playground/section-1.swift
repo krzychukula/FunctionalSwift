@@ -72,7 +72,7 @@ enum ReadFileResult {
 
 let exampleSuccess: ReadFileResult = ReadFileResult.Success("File contents goes here")
 
-func readFile(path: String, encoding: Encoding) -> ReadFileResult {
+func readFile2(path: String, encoding: Encoding) -> ReadFileResult {
     var maybeError: NSError?
     let maybeString: String? = NSString(contentsOfFile: path, encoding: toNSStringEncoding(encoding), error: &maybeError)
     
@@ -87,7 +87,7 @@ func readFile(path: String, encoding: Encoding) -> ReadFileResult {
 }
 
 
-switch readFile("/Users/chris/work/npm-debug.log", Encoding.UTF8) {
+switch readFile2("/Users/chris/work/npm-debug.log", Encoding.UTF8) {
 case let ReadFileResult.Success(contents):
     println("File successfully opened...")
 case let ReadFileResult.Failure(error):
@@ -98,9 +98,52 @@ case let ReadFileResult.Failure(error):
 
 //Adding Generics
 
-func writeFile(contents: String, path: String, encoding: Encoding) -> Bool {
+func writeFile1(contents: String, path: String, encoding: Encoding) -> Bool {
     return contents.writeToFile(path, atomically: false, encoding: toNSStringEncoding(encoding), error: nil)
 }
 
+
+enum WriteFileResult {
+    case Success
+    case Failure(NSError)
+}
+
+class Box<T> {
+    let unbox: T
+    init(_ value: T) { self.unbox = value }
+}
+
+enum Result<T> {
+    case Success(Box<T>)
+    case Failure(NSError)
+}
+
+func readFile(path: String, encoding: Encoding) -> Result<String> {
+    var maybeError: NSError?
+    let maybeString: String? = NSString(contentsOfFile: path, encoding: toNSStringEncoding(encoding), error: &maybeError)
+    
+    if let string = maybeString {
+        return Result<String>.Success(Box<String>(string))
+    } else if let error = maybeError {
+        return Result<String>.Failure(error)
+    } else {
+        assert(false, "The impossible occurred")
+    }
+}
+
+func writeFile(contents: String,
+    path: String, encoding: Encoding) -> Result<()> {
+    var maybeError: NSError?
+    var success: Bool? = contents.writeToFile(path,
+        atomically: false,
+        encoding: toNSStringEncoding(encoding),
+        error: &maybeError)
+    
+        if let err = maybeError {
+            return Result<()>.Failure(err)
+        }
+        
+    return Result<()>.Success(Box<()>())
+}
 
 
