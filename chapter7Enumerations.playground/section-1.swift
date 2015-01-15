@@ -65,7 +65,12 @@ func readFile1(path: String, encoding: Encoding) -> String? {
     return maybeString
 }
 
+enum ReadFileResult {
+    case Success(String)
+    case Failure(NSError)
+}
 
+let exampleSuccess: ReadFileResult = ReadFileResult.Success("File contents goes here")
 
 
 
