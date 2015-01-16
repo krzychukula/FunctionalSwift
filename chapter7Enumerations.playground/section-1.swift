@@ -173,3 +173,23 @@ func ??<T>(result: Result<T>, handleError: NSError -> T) -> T {
         return handleError(error)
     }
 }
+
+
+//The Algebra of Data Types
+
+enum Add<T, U> {
+    case InLeft(Box<T>)
+    case InRight(Box(<U>))
+}
+
+enum Zero {}
+
+//multiplication
+
+struct Times<T, U> {
+    let fst: T
+    let snd: U
+}
+
+typealias One = ()
+
