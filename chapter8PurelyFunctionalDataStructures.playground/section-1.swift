@@ -70,4 +70,45 @@ func isEmptySet<T>(tree: Tree<T>) -> Bool {
     }
 }
 
+//binary search trees
 
+func isBST<T: Comparable>(tree: Tree<T>) -> Bool {
+    switch tree {
+    case Tree.Leaf:
+        return true
+    case let Tree.Node(left, x, right):
+        let leftElements = elements(left.unbox)
+        let rightElements = elements(right.unbox)
+        
+        return all(leftElements) { y in y < x.unbox }
+            && all(rightElements) { y in y > x.unbox }
+            && isBST(left.unbox)
+            && isBST(right.unbox)
+        
+    }
+}
+
+
+func all<T> (xs: [T], predicate: T -> Bool) -> Bool {
+    for x in xs {
+        if !predicate(x) {
+            return false
+        }
+    }
+    return true
+}
+
+func setContains<T: Comparable>(x: T, tree: Tree<T>) -> Bool {
+    switch tree {
+    case Tree.Leaf:
+        return false
+    case let Tree.Node(left, y, right) where x == y.unbox:
+        return true
+    case let Tree.Node(left, y, right) where x < y.unbox:
+        return setContains(x, left.unbox)
+    case let Tree.Node(left, y, right) where x > y.unbox:
+        return setContains(x, right.unbox)
+    default:
+        assert(false, "The impossible occurred")
+    }
+}
