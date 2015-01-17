@@ -34,4 +34,20 @@ let leaf: Tree<Int> = Tree.Leaf
 let five: Tree<Int> = Tree.Node(Box(leaf), Box(5), Box(leaf))
 
 
+func single<T>(x: T) -> Tree<T> {
+    return Tree.Node(Box(Tree.Leaf), Box(x), Box(Tree.Leaf))
+}
+
+
+func count<T>(tree: Tree<T>) -> Int {
+    switch tree {
+    case let Tree.Leaf:
+        return 0
+    case let Tree.Node(left, x, right):
+        return 1 + count(left.unbox) + count(right.unbox)
+    }
+}
+
+
+
 
