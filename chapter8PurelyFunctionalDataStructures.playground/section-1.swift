@@ -132,6 +132,20 @@ func setInsert<T: Comparable>(x: T, tree: Tree<T>) -> Tree<T> {
 }
 
 
-//autocompletion using trees
+//autocompletion using tries
+
+func autocomplete(history: [String], textEntered: String) -> [String] {
+    return history.filter { string in
+        string.hasPrefix(textEntered)
+    }
+}
+
+
+
+
+
+
+
+
 
 
