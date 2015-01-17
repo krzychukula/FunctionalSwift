@@ -2,21 +2,21 @@
 
 import Cocoa
 
-func emptySet<T>() -> Array<T> {
-    return []
-}
-
-func isEmptySet<T>(set: [T]) -> Bool {
-    return set.isEmpty
-}
-
-func setContains<T: Equatable>(x: T, set: [T]) -> Bool {
-    return contains(set, x)
-}
-
-func setInsert<T: Equatable>(x: T, set: [T]) -> [T] {
-    return setContains(x, set) ? set : [x] + set
-}
+//func emptySet<T>() -> Array<T> {
+//    return []
+//}
+//
+//func isEmptySet<T>(set: [T]) -> Bool {
+//    return set.isEmpty
+//}
+//
+//func setContains<T: Equatable>(x: T, set: [T]) -> Bool {
+//    return contains(set, x)
+//}
+//
+//func setInsert<T: Equatable>(x: T, set: [T]) -> [T] {
+//    return setContains(x, set) ? set : [x] + set
+//}
 
 enum Tree<T> {
     case Leaf
@@ -57,5 +57,17 @@ func elements<T>(tree: Tree<T>) -> [T] {
     }
 }
 
+func emptySet<T>() -> Tree<T> {
+    return Tree.Leaf
+}
+
+func isEmptySet<T>(tree: Tree<T>) -> Bool {
+    switch tree {
+    case let Tree.Leaf:
+        return true
+    case let Tree.Node(_, _, _):
+        return false
+    }
+}
 
 
