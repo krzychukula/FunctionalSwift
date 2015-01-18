@@ -140,9 +140,50 @@ func autocomplete(history: [String], textEntered: String) -> [String] {
     }
 }
 
+//tries = digital search trees
 
+struct Trie<T: Hashable> {
+    let isElem: Bool
+    let children: [T: Trie<T>]
+}
 
+func empty<T: Hashable>() -> Trie<T> {
+    return Trie(isElem: false, children: [T: Trie<T>]())
+}
 
+func elements<T: Hashable>(trie: Trie<T>) -> [[T]] {
+    var result: [[T]] = trie.isElem ? [[]] : []
+    for (key, value) in trie.children {
+        result += elements(value).map {
+            xs in [key] + xs
+        }
+    }
+    return result
+}
+
+extension Array {
+    var decompose: (head: T, tail: [T])? {
+        return (count > 0) ? (self[0], Array(self[1..<count])) : nil
+    }
+}
+
+func sum(xs: [Int]) -> Int {
+    if let (head, tail) = xs.decompose {
+        return (head + sum(tail))
+    }else {
+        return 0
+    }
+}
+
+func qsort(var input: [Int]) -> [Int] {
+    if let (pivot, rest) = input.decompose {
+        let lesser = rest.filter { $0 < pivot }
+        let greater = rest.filter { $0 >= pivot }
+        return qsort(lesser) + [pivot] + qsort(greater)
+    }else{
+        return []
+    }
+}
 
 
 
