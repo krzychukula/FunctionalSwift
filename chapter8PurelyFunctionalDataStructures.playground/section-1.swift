@@ -186,6 +186,37 @@ func qsort(var input: [Int]) -> [Int] {
 }
 
 
+func lookup<T: Hashable>(key: [T], trie: Trie<T>) -> Bool {
+    if let (head, tail) = key.decompose {
+        if let subtrie = trie.children[head] {
+            return lookup(tail, subtrie)
+        }else{
+            return false
+        }
+    }else{
+        return trie.isElem
+    }
+}
+
+func withPrefix<T: Hashable>(prefix: [T], trie: Trie<T>) -> Trie<T>? {
+    if let (head, tail) = prefix.decompose {
+        if let remainder = trie.children[head] {
+            return withPrefix(tail, remainder)
+        }else{
+            return nil
+        }
+    }else{
+        return trie
+    }
+}
+
+func autocomplete<T: Hashable>(key: [T], trie: Trie<T>) -> [[T]] {
+    if let prefixTree = withPrefix(key, trie) {
+        return elements(prefixTree)
+    }else{
+        return []
+    }
+}
 
 
 
