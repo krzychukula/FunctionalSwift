@@ -28,11 +28,11 @@ enum Diagram {
     case Prim(CGSize, Primitive)
     case Beside(Box<Diagram>, Box<Diagram>)
     case Below(Box<Diagram>, Box<Diagram>)
-    case Attributed(Attribure, Box<Diagram>)
+    case Attributed(Attribute, Box<Diagram>)
     case Align(Vector2D, Box<Diagram>)
 }
 
-enum Attribure {
+enum Attribute {
     case FillColor(NSColor)
 }
 
@@ -119,12 +119,54 @@ func pdf(diagram: Diagram, width: CGFloat) -> NSData {
 }
 
 
+//Extra Combinators
+//== convenience functions
+
+func rect(#width: CGFloat, #height: CGFloat) -> Diagram {
+    return Diagram.Prim(CGSizeMake(width, height), .Rectangle)
+}
+func circle(#diameter: CGFloat) -> Diagram {
+    return Diagram.Prim(CGSizeMake(diameter, diameter), .Ellipse)
+}
+func text(#width: CGFloat, #height: CGFloat, text theText: String) -> Diagram {
+    return Diagram.Prim(CGSizeMake(width, height), .Text(theText))
+}
+func square(#side: CGFloat) -> Diagram {
+    return rect(width: side, height: side)
+}
+
+infix operator ||| { associativity left }
+func ||| (l: Diagram, r: Diagram) -> Diagram {
+    return Diagram.Beside(Box(l), Box(r))
+}
 
 
+infix operator --- { associativity left }
+func --- (l: Diagram, r: Diagram) -> Diagram {
+    return Diagram.Below(Box(l), Box(r))
+}
+
+extension Diagram {
+    func fill(color: NSColor) -> Diagram {
+        return Diagram.Attributed(Attribute.FillColor(color), Box(self))
+    }
+    
+    func alignTop() -> Diagram {
+        return Diagram.Align(Vector2D(x: 0.5, y: 1), Box(self))
+    }
+    
+    func alignBottom() -> Diagram {
+        return Diagram.Align(Vector2D(x: 0.5, y: 0), Box(self))
+    }
+    
+}
 
 
+let empty: Diagram = rect(width: 0, height: 0)
 
-
+func hcat(diagrams: [Diagram]) -> Diagram {
+    return diagrams.reduce(empty, combine: |||)
+}
 
 
 
