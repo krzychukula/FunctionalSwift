@@ -69,22 +69,65 @@ extension CGSize {
     }
 }
 
-func /(l: CGSize, r: CGSize) -> CGSize {
-    return pointWise(/, l, r)
-}
-func *(l: CGSize, r: CGSize) -> CGSize {
-    return pointWise(*, l, r)
-}
-func +(l: CGSize, r: CGSize) -> CGSize {
-    return pointWise(+, l, r)
-}
-func -(l: CGSize, r: CGSize) -> CGSize {
-    return pointWise(-, l, r)
-}
+//func /(l: CGSize, r: CGSize) -> CGSize {
+//    return pointWise(/, l, r)
+//}
+//func *(l: CGSize, r: CGSize) -> CGSize {
+//    return pointWise(*, l, r)
+//}
+//func +(l: CGSize, r: CGSize) -> CGSize {
+//    return pointWise(+, l, r)
+//}
+//func -(l: CGSize, r: CGSize) -> CGSize {
+//    return pointWise(-, l, r)
+//}
 
 
-func fit(alignment: Vector2D, inputSize: CGSize, rect: CGRect) -> CGRect {
-    let scaleSize = rect.size / inputSize
-    let scale = min(scaleSize.width, scaleSize.height)
+//func fit(alignment: Vector2D, inputSize: CGSize, rect: CGRect) -> CGRect {
+//    let scaleSize = rect.size / inputSize
+//    let scale = min(scaleSize.width, scaleSize.height)
+//    
+//}
+
+
+//creating Views and PDFs
+
+class Draw: NSView {
+    let diagram: Diagram
     
+    init(frame frameRect: NSRect, diagram: Diagram){
+        self.diagram = diagram
+        super.init(frame: frameRect)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func drawRect(dirtyRect: NSRect) {
+        if let context = NSGraphicsContext.currentContext() {
+            draw(context.cgContext, self.bounds, diagram)
+        }
+    }
 }
+
+func pdf(diagram: Diagram, width: CGFloat) -> NSData {
+    let unitSize = diagram.size
+    let height = width * (unitSize.height/unitSize.width)
+    let v: Draw = Draw(frame: NSMakeRect(0, 0, width, height), diagram: diagram)
+    return v.dataWithPDFInsideRect(v.bounds)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
