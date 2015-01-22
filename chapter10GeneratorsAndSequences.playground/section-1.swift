@@ -33,3 +33,28 @@ let generator = CountdownGenerator(array: xs)
 while let i = generator.next() {
     println("Element \(i) of the array is \(xs[i])")
 }
+
+class PowerGenerator: GeneratorType {
+    typealias Element = NSDecimalNumber
+    
+    var power: NSDecimalNumber = NSDecimalNumber(int: 1)
+    let two = NSDecimalNumber(int: 2)
+    
+    func next() -> Element? {
+        power = power.decimalNumberByMultiplyingBy(two)
+        return power
+    }
+}
+
+func findPower(predicate: NSDecimalNumber -> Bool) -> NSDecimalNumber {
+    let g = PowerGenerator()
+    while let x = g.next() {
+        if predicate(x) {
+            return x
+        }
+    }
+    return 0
+}
+
+findPower { $0.integerValue > 1000 }
+
