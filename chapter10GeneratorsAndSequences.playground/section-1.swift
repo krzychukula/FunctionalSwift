@@ -185,15 +185,6 @@ for x in reverseElements {
 }
 
 
-//from additional code
-//extension Int: Smaller {
-//    func smaller() -> GeneratorOf<Int> {
-//        let result: Int? = self < 0 ? nil : self.predecessor()
-//        return one(result)
-//    }
-//}
-
-
 
 //func lazy<S: SequenceType>(s: S) -> LazySequence<S>
 
@@ -234,7 +225,15 @@ func inOrder<T>(tree: Tree<T>) -> GeneratorOf<T> {
     }
 }
 
+//Better Shrinking QuickCheck
 
+//from additional code
+//extension Int: Smaller {
+//    func smaller() -> GeneratorOf<Int> {
+//        let result: Int? = self < 0 ? nil : self.predecessor()
+//        return one(result)
+//    }
+//}
 
 
 
