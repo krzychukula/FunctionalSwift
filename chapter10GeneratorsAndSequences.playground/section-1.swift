@@ -131,3 +131,38 @@ func +<A>(var first: GeneratorOf<A>, var second: GeneratorOf<A>) -> GeneratorOf<
 }
 
 //Sequences
+
+protocol SequenceType {
+    typealias Generator: GeneratorType
+    func generate() -> Generator
+}
+
+
+struct ReverseSequence<T>: SequenceType {
+    var array: [T]
+    
+    init(array: [T]){
+        self.array = array
+    }
+    
+    typealias Generator = CountdownGenerator
+    func generate() -> Generator {
+        return CountdownGenerator(array: array)
+    }
+}
+
+let reverseSequence = ReverseSequence(array: xs)
+let reverseGenerator = reverseSequence.generate()
+
+while let i = reverseGenerator.next() {
+    println("Index \(i) is '\(xs[i])")
+}
+
+for i in ReverseSequence(array: xs) {
+    println("Index \(i) is '\(xs[i])")
+}
+
+
+
+
+
