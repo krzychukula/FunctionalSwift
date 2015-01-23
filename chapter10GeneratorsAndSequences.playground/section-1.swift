@@ -194,3 +194,48 @@ for x in reverseElements {
 //}
 
 
+
+//func lazy<S: SequenceType>(s: S) -> LazySequence<S>
+
+
+//Traversing a Binary Tree
+
+
+class Box<T> {
+    let unbox: T
+    init(_ value: T) { self.unbox = value }
+}
+
+
+enum Tree<T> {
+    case Leaf
+    case Node(Box<Tree<T>>, T, Box<Tree<T>>)
+}
+
+//struct GeneratorOfOne<T>: GeneratorType, SequenceType {
+//    
+//    init(_ element: T?)
+//    // ...
+//}
+
+let three: [Int] = Array(GeneratorOfOne(3))
+let empty: [Int] = Array(GeneratorOfOne(nil))
+
+func one<X>(x: X?) -> GeneratorOf<X> {
+    return GeneratorOf(GeneratorOfOne(x))
+}
+
+func inOrder<T>(tree: Tree<T>) -> GeneratorOf<T> {
+    switch tree {
+    case Tree.Leaf:
+        return GeneratorOf {return nil}
+    case let Tree.Node(left, x, right):
+        return inOrder(left.unbox) + one(x) + inOrder(right.unbox)
+    }
+}
+
+
+
+
+
+
