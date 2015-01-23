@@ -8,10 +8,10 @@ import Cocoa
 //    //do something with x;
 //}
 
-protocol GeneratorType {
-    typealias Element
-    func next() -> Element?
-}
+//protocol GeneratorType {
+//    typealias Element
+//    func next() -> Element?
+//}
 
 class CountdownGenerator: GeneratorType {
     typealias Element = Int
@@ -132,10 +132,15 @@ func +<A>(var first: GeneratorOf<A>, var second: GeneratorOf<A>) -> GeneratorOf<
 
 //Sequences
 
-protocol SequenceType {
-    typealias Generator: GeneratorType
-    func generate() -> Generator
+func map<A, B>(s: SequenceOf<A>, f: A -> B) -> SequenceOf<B> {
+    return SequenceOf { map(s.generate(), f) }
 }
+
+
+//protocol SequenceType {
+//    typealias Generator: GeneratorType
+//    func generate() -> Generator
+//}
 
 
 struct ReverseSequence<T>: SequenceType {
@@ -146,8 +151,9 @@ struct ReverseSequence<T>: SequenceType {
     }
     
     typealias Generator = CountdownGenerator
+    
     func generate() -> Generator {
-        return CountdownGenerator(array: array)
+        return Generator(array: array)
     }
 }
 
@@ -162,7 +168,29 @@ for i in ReverseSequence(array: xs) {
     println("Index \(i) is '\(xs[i])")
 }
 
+//map, filter...
+
+//func filter<S: SequenceType>(source: S,
+//    includeElement: S.Generator.Element -> Bool)
+//    -> [S.Generator.Element]
+
+//func map<S: SequenceType, T>(source: S,
+//    transform: S.Generator.Element -> T)
+//    -> [T]
+
+let reverseElements = map(ReverseSequence(array: xs)) { i in xs[i]}
+
+for x in reverseElements {
+    println("Element is \(x)")
+}
 
 
+//from additional code
+//extension Int: Smaller {
+//    func smaller() -> GeneratorOf<Int> {
+//        let result: Int? = self < 0 ? nil : self.predecessor()
+//        return one(result)
+//    }
+//}
 
 
