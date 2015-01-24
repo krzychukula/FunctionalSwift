@@ -342,3 +342,41 @@ for x in s {
     print(x)
 }
 
+
+struct JoinedGenerator<A>: GeneratorType {
+    typealias Element = A
+    
+    var generator: GeneratorOf<GeneratorOf<A>>
+    var current: GeneratorOf<A>?
+    
+    init(_ g: GeneratorOf<GeneratorOf<A>>) {
+        generator = g
+        current = generator.next()
+    }
+    
+    mutating func next() -> Element? {
+        if var c = current {
+            if let x = c.next() {
+                return x
+            }else{
+                current = generator.next()
+                return next()
+            }
+        }
+        return nil
+    }
+}
+
+func join<A>(s: SequenceOf<SequenceOf<A>>) -> SequenceOf<A> {
+    return SequenceOf {
+        JoinedGenerator(map(s.generate()) { g in
+            g.generate()
+        })
+    }
+}
+
+func flatMap<A, B>(xs: SequenceOf<A>, f: A -> SequenceOf<B>) -> SequenceOf<B> {
+    return join(map(xs, f))
+}
+
+
