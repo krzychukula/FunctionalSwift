@@ -227,6 +227,20 @@ func inOrder<T>(tree: Tree<T>) -> GeneratorOf<T> {
 
 //Better Shrinking QuickCheck
 
+protocol Smaller {
+    func smaller() -> Self?
+}
+
+extension Array: Smaller {
+    func smaller() -> [T]? {
+        if (!self.isEmpty) {
+            return Array(dropFirst(self))
+        }
+        return nil
+    }
+}
+
+
 //from additional code
 //extension Int: Smaller {
 //    func smaller() -> GeneratorOf<Int> {
