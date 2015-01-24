@@ -132,9 +132,9 @@ func +<A>(var first: GeneratorOf<A>, var second: GeneratorOf<A>) -> GeneratorOf<
 
 //Sequences
 
-func map<A, B>(s: SequenceOf<A>, f: A -> B) -> SequenceOf<B> {
-    return SequenceOf { map(s.generate(), f) }
-}
+//func map<A, B>(s: SequenceOf<A>, f: A -> B) -> SequenceOf<B> {
+//    return SequenceOf { map(s.generate(), f) }
+//}
 
 
 //protocol SequenceType {
@@ -227,27 +227,45 @@ func inOrder<T>(tree: Tree<T>) -> GeneratorOf<T> {
 
 //Better Shrinking QuickCheck
 
+//protocol Smaller {
+//    func smaller() -> Self?
+//}
+//
+//extension Array: Smaller {
+//    func smaller() -> [T]? {
+//        if (!self.isEmpty) {
+//            return Array(dropFirst(self))
+//        }
+//        return nil
+//    }
+//}
+
 protocol Smaller {
-    func smaller() -> Self?
+    func smaller() -> GeneratorOf<Self>
 }
 
-extension Array: Smaller {
-    func smaller() -> [T]? {
-        if (!self.isEmpty) {
-            return Array(dropFirst(self))
+//from additional code
+extension Int: Smaller {
+    func smaller() -> GeneratorOf<Int> {
+        let result: Int? = self < 0 ? nil : self.predecessor()
+        return one(result)
+    }
+}
+
+func removeElement<T>(var array: [T]) -> GeneratorOf<[T]> {
+    var i = 0
+    return GeneratorOf {
+        if i < array.count {
+            var result = array
+            result.removeAtIndex(i)
+            i++
+            return result
         }
         return nil
     }
 }
-
-
-//from additional code
-//extension Int: Smaller {
-//    func smaller() -> GeneratorOf<Int> {
-//        let result: Int? = self < 0 ? nil : self.predecessor()
-//        return one(result)
-//    }
-//}
+removeElement([1,2,3])
+Array(removeElement([1,2,3]))
 
 
 
