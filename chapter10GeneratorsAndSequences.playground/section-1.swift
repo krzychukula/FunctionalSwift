@@ -310,3 +310,35 @@ func smaller<T: Smaller>(ls: [T]) -> GeneratorOf<[T]> {
 }
 
 Array(smaller([1,2,3]))
+
+
+//Beyond Map and Filter
+
+//“struct SequenceOf<T> : SequenceType {
+//    init<G : GeneratorType>(_ makeUnderlyingGenerator: () -> G)
+//    
+//    func generate() -> GeneratorOf<T>
+//}”
+//
+//Excerpt From: Chris Eidhof. “Functional Programming in Swift.” iBooks.
+
+//func +<A>(l: SequenceOf<A>, r: SequenceOf<A>) -> SequenceOf<A> {
+//    return SequenceOf(l.generate() + r.generate())
+//}
+
+func +<A>(l: SequenceOf<A>, r: SequenceOf<A>) -> SequenceOf<A> {
+    return SequenceOf {
+        l.generate() + r.generate()
+    }
+}
+
+let s = SequenceOf([1,2,3]) + SequenceOf([4,5,6])
+
+for x in s {
+    print(x)
+}
+
+for x in s {
+    print(x)
+}
+
