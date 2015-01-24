@@ -132,9 +132,15 @@ func +<A>(var first: GeneratorOf<A>, var second: GeneratorOf<A>) -> GeneratorOf<
 
 //Sequences
 
-//func map<A, B>(s: SequenceOf<A>, f: A -> B) -> SequenceOf<B> {
-//    return SequenceOf { map(s.generate(), f) }
-//}
+func map<A, B>(var g: GeneratorOf<A>, f: A -> B) -> GeneratorOf<B> {
+    return GeneratorOf {
+        g.next().map(f)
+    }
+}
+
+func map<A, B>(s: SequenceOf<A>, f: A -> B) -> SequenceOf<B> {
+    return SequenceOf { map(s.generate(), f) }
+}
 
 
 //protocol SequenceType {
@@ -267,6 +273,40 @@ func removeElement<T>(var array: [T]) -> GeneratorOf<[T]> {
 removeElement([1,2,3])
 Array(removeElement([1,2,3]))
 
+extension Array {
+    var decompose : (head: T, tail: [T])? {
+        return (count > 0) ? (self[0], Array(self[1..<count])) : nil
+    }
+}
 
+func smaller1<T>(array: [T]) -> GeneratorOf<[T]> {
+    if let (head, tail) = array.decompose {
+        let gen1: GeneratorOf<[T]> = one(tail)
+        let gen2: GeneratorOf<[T]> = map(smaller1(tail)) {
+            smallerTail in
+                [head] + smallerTail
+        }
+        return gen1 + gen2
+    }else{
+        return one(nil)
+    }
+}
 
+Array(smaller1([1,2,3]))
 
+func smaller<T: Smaller>(ls: [T]) -> GeneratorOf<[T]> {
+    if let (head, tail) = ls.decompose {
+        let gen1: GeneratorOf<[T]> = one(tail)
+        let gen2: GeneratorOf<[T]> = map(smaller(tail), { xs in
+            [head] + xs
+        })
+        let gen3: GeneratorOf<[T]> = map(head.smaller(), { x in
+            [x] + tail
+        })
+        return gen1 + gen2 + gen3
+    }else{
+        return one(nil)
+    }
+}
+
+Array(smaller([1,2,3]))
