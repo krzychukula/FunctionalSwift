@@ -26,4 +26,33 @@ testParser(parseA(), "abcd")
 testParser(parseA(), "test")
 //Nothing is working of course because I found in last chapter that searching like creazy for anything that would make code run does not help me actually understand it so why bother?
 
+func parseCharacter(character: Character) -> Parser<Character, Character> {
+    return Parser { x in
+        if let (head, tail) = x.decompose {
+            if head == character {
+                return one((character, tail))
+            }
+        }
+        return none()
+    }
+}
+
+testParser(parseCharacter("t"), "test")
+
+func satisfy<Token>(condition: Token -> Bool) -> Parser<Token, Token> {
+    
+    return Parser { x in
+        if let (head, tail) = x.decompose {
+            if condition(head) {
+                return one((head, tail))
+            }
+        }
+        return none()
+    }
+}
+func token<Token: Equatable>(t: Token) -> Parser<Token, Token> {
+        return satisfy { $0 == t }
+}
+
+
 
