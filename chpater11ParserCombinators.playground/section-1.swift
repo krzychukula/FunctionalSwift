@@ -98,6 +98,85 @@ let p: Parser<Character, (Character, Character)> = sequence(token(x), token(y))
 testParser(p, "xyz")
 
 
+//Refining Sequence
+
+func integerParser<Token>() -> Parser<Token, Character -> Int> {
+    return Parser { input in
+        return one(({x in String(x).toInt()! }, input))
+    }
+}
+
+
+func combinator<Token, A, B>(l: Parser<Token, A -> B>, r: Parser<Token, A>) -> Parser<Token, B> {
+    
+    return Parser { input in
+        let leftResults = l.p(input)
+        return flatMap(leftResults) { f, leftRemainder in
+            let rightResults = r.p(leftRemainder)
+            return map(rightResults) { x, rightRemainder in
+                (f(x), rightRemainder)
+            }
+        }
+    }
+}
+
+
+let three: Character = "3"
+
+testParser(combinator(integerParser(), token(three)), "3")
+
+
+func pure<Token, A>(value: A) -> Parser<Token, A> {
+    return Parser { one((value, $0)) }
+}
+
+func toInteger(c: Character) -> Int {
+    return String(c).toInt()!
+}
+testParser(combinator(pure(toInteger), token(three)), "3")
+
+func toInteger2(c1: Character)(c2: Character) -> Int {
+    let combined = String(c1) + String(c2)
+    return combined.toInt()!
+}
+
+testParser(combinator(combinator(pure(toInteger2), token(three)), token(three)), "33")
+
+
+infix operator <*> { associativity left precedence 150 }
+func <*><Token, A, B>(l: Parser<Token, A -> B>, r: Parser<Token, A>) -> Parser<Token, B> {
+    
+    return Parser { input in
+        let leftResults = l.p(input)
+        return flatMap(leftResults) { f, leftRemainder in
+            let rightResults = r.p(leftRemainder)
+            return map(rightResults) { x, y in
+                (f(x), y)
+            }
+        }
+    }
+}
+
+
+testParser(pure(toInteger2) <*> token(three) <*> token(three), "33")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
