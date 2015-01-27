@@ -162,6 +162,37 @@ testParser(pure(toInteger2) <*> token(three) <*> token(three), "33")
 
 
 
+let aOrB = token(a) <|> token(b)
+
+func combine(a: Character)(b: Character)(c: Character) -> String {
+    return String([a, b, c])
+}
+
+let parser = pure<combine> <*> aOrB <*> aOrB <*> token(b)
+
+testParser(parser, "abb")
+
+
+
+func curry<A, B, C, D>(f: (A, B, C) -> D) -> A -> B -> C -> D {
+    return { a in { b in { c in f(a, b, c) } } }
+}
+
+let parser2 = pure(curry { String([$0, $1, $2] }) <*> aOrB <*> aOrB <*> token(b)
+
+testParser(parser2, "abb")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
