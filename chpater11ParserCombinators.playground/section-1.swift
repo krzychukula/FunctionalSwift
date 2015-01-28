@@ -184,8 +184,79 @@ testParser(parser2, "abb")
 
 
 
+//Convenience Combinators
+
+func characterFromSet(set: NSCharacterSet) -> Parser<Character, Character> {
+    
+    return satisfy { return member(set, $0) }
+}
+
+let decimals = NSCharacterSet.decimalDigitCharacterSet()
+let decimalDigit = characterFromSet(decimals)
+
+testParser(decimalDigit, "012")
 
 
+func zeroOrMore<Token, A>(p: Parser<Token, A>) -> Parser<Token, [A]> {
+    return (pure(prepend) <*> p <*> zeroOrMore(p)) <|> pure([])
+}
+
+func lazy<Token, A>(f: @autoclosure () -> Parser<Token, A>) -> Parser<Token, A> {
+    
+    return Parser { x in f().p() }
+}
+
+func zeroOrMore<Token, A>(p: Parser<Token, A>) -> Parser<Token, [A]> {
+    
+    return (pure(prepend) <*> p <*> lazy(zeroOrMore(p))) <|> pure([])
+}
+
+testParser(zeroOrMore(decimalDigit), "12345")
+
+func oneOrMore<Token, A>(p: Parser<Token, A>) -> Parser<Token, [A]> {
+    return pure(prepend) <*> p <*> zeroOrMore(p)
+}
+
+
+let number = pure { characters in
+    string(characters).toInt! } <*> oneOrMore(decimalDigit)
+
+testParser(number, "205")
+
+
+infix operator </> { precedence 170 }
+func </> <Token, A, B>(l: A -> B, r: Parser<Token, A>) -> Parser<Token, B> {
+    
+    return pure(l) <*> r
+}
+
+
+let plus: Character = "+"
+func add(x: Int)(_:Character)(y: Int) -> Int {
+    return x + y
+}
+let parseAddition = add </> number <*> token(plus) <*> number
+
+testParser(parseAddition, "41+1")
+
+
+infix operator <* { associativity left precedence 150 }
+func <* <Token, A, B>(p: Parser<Token, A>, q: Parser<Token, B>) -> Parser<Token, A> {
+    
+    return {x in {_ in x} } </> p <*> q
+}
+
+infix operator *> { associativity left precedence 150 }
+func *> <Token, A, B>(p: Parser<Token, A>, q: Parser<Token, B>) -> Parser<Token, B> {
+    
+    return {_ in {y in y} } </> p <*> q
+}
+
+
+let multiply: Character = "*"
+let parseMultiplication = curry(*) </> number <* token(multiply) <*> number
+
+testParser(parseMultiplication, "8*8")
 
 
 
