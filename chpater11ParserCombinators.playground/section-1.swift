@@ -259,16 +259,119 @@ let parseMultiplication = curry(*) </> number <* token(multiply) <*> number
 testParser(parseMultiplication, "8*8")
 
 
+//A Simple Calculator
+
+typealias Calculator = Parser<Character, Int>
+
+func operator0(character: Character,
+    evaluate: (Int, Int) -> Int,
+    operand: Calculator
+    ) -> Calculator {
+        return curry { evaluate($0, $1) } </> operand <* token(character) <*> operand
+}
+
+
+func pAtom0 -> Calculator { return number }
+
+func pMultiply0() -> Calculator {
+    return operator0("*", *, pAtom0())
+}
+
+func pAdd0() -> Calculator {
+    return operator0("+", +, pMultiply0())
+}
+
+func pExpression0() -> Calculator {
+    return pAdd0()
+}
+
+testParser(pExpresssion0(), "1+3*3")
+//this fails
+
+func operator1(character: Character, evaluate: (Int, Int) -> Int, operand: Calculator) -> Calculator {
+    
+    let withOperator = curry {
+        evaluate($0, $1)
+    } </> operand <* token(character) <*> operand
+    
+    return withOperator <|> operand
+}
+
+func pAtom1() -> Calculator { return number }
+func pMultiply1() -> Calculator {
+    return operator1("*", *, pAtom1())
+}
+func pAdd1() -> Calculator {
+    return operator1("+", +, pMultiply1())
+}
+func pExpression1() -> Calculator {
+    return pAdd1()
+}
+
+testParser(pExpression1(), "1+3*3")
 
 
 
+typealias Op = (Character, (Int, Int) -> Int)
+let operatorTable: [Op] = [("*", *), ("/", /), ("+", +), ("-", -)]
+
+func pExpression2() -> Calculator {
+    return operatorTable.reduce(number) {
+        (next: Calculator, op: Op) in
+        operator1(op.0, op.1, next)
+    }
+}
+
+testParser(pExpression2(), "1+3*3")
 
 
 
+//grammar
+//expression = min
+//min = add "-" add | add
+//add = div "+" div | div
+//div = mul "/" mul | mul
+//mul = num "*" num | num
+
+//refactor
+//expression = min
+//min = add ("-" add)?
+//add = div ("+" div)?
+//div = mul ("/" mul)?
+//mul = num ("*" num)?
 
 
 
+infix operator </ { precedence 170 }
+func </ <Token, A, B>(l: A, r: Parser<Token, B>) -> Parser<Token, A> {
+    
+    return pure(l) <* r
+}
 
+
+func optionallyFollowed<A>(l: Parser<Character, A>, r: Parser<Character, A -> A>) -> Parser<Character, A> {
+    
+    let apply: A -> (A -> A) -> A = {x in { f in f(x) } }
+    return apply </> l <*> (r <|> pure { $0 })
+}
+
+
+func op(character: Character,
+    evaluate: (Int, Int) -> Int,
+    operand: Calculator) -> Calculator {
+        
+        let withOperator = curry(flip(evaluate)) </ token(character) <*> operand
+        
+        return optionallyFollowed(operand, withOperator)
+}
+
+func pExpression() -> Calculator {
+    return operatorTable.reduce(number, { next, inOp in
+        op(inOp.0, inOp.1, next)
+    })
+}
+
+testParser(pExpression() <* eof(), "10-3*2")
 
 
 
